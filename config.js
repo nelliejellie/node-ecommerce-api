@@ -12,3 +12,7 @@ const connect = async () =>{
 }
 
 module.exports = {connect};
+
+
+// for local connection
+//mongoose.connect('mongodb://localhost:27017/products')

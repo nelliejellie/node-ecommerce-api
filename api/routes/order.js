@@ -1,52 +1,26 @@
 const express = require('express')
 const router = express.Router();
+const mongoose = require('mongoose')
 
-router.get('/', (req,res,next)=>{
-    res.status(200).json({
-        message: "Handling GET requests to /products"
-    })
-});
+const Order = require('../models/order');
+const Product = require("../models/product")
+const checkAuth = require('../middleware/check-auth')
 
+const OrdersController = require("../controllers/orders")
 
-router.post('/', (req,res,next)=>{
-    const order = {
-        productId: req.body.productId,
-        quantity: req.body.quantity
-    };
-    res.status(201).json({
-        message: "successful",
-        payload:order
-    })
-})
+//get all orders
+router.get('/',checkAuth, OrdersController.order_get_all);
 
-router.get('/:orderId', (req, res, next)=>{
-    const id = req.params.orderId;
-    if(id === 'special'){
-        res.status(200).json({
-            message: "you discovered the special id",
-            id: id
-        })
-    }else{
-        res.status(200).json({
-            message:"you passed an id"
-        })
-    }
-})
+// post an order
+router.post('/',checkAuth,OrdersController.create_order)
 
-router.patch('/:orderId', (req, res, next)=>{
-    const id = req.params.orderId;
-    res.status(200).json({
-        message: "updated order",
-        id: id
-    })
-})
+// find an order by order id
+router.get('/:orderId',checkAuth,OrdersController.get_order_by_id)
 
-router.delete('/:orderId', (req, res, next)=>{
-    const id = req.params.orderId;
-    res.status(200).json({
-        message: "deleted order",
-    })
-})
+router.patch('/:orderId',checkAuth, OrdersController.edit_order)
+
+// delete an order
+router.delete('/:orderId',checkAuth, OrdersController.delete_order)
 
 
 module.exports = router; 

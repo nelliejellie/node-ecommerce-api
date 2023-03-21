@@ -8,11 +8,13 @@ const config = require("./config")
 
 
 
+
 //mongoose.connect('mongodb://localhost:27017/products')
 
 //routes
 const productRoutes = require('./api/routes/product')
 const orderRoutes = require('./api/routes/order');
+const userRoutes = require('./api/routes/user')
 
 // mongoose.connect('mongodb+srv://emekaewelike:' + process.env.MONGO_ATLAS_PW + '@node-rest-api.d9zqiax.mongodb.net/?retryWrites=true&w=majority')
 // .catch(err => console.log(err))
@@ -22,7 +24,8 @@ config.connect()
 
 // used for loggin requests
 app.use(morgan('dev'));
-
+// for making the uploads file public
+app.use('/uploads',express.static('uploads'))
 // used to parse incoming requests
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -42,6 +45,7 @@ app.use(bodyParser.json());
 // routes for handling requests
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next)=>{
     const error = new Error('Not Found');
